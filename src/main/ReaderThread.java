@@ -27,13 +27,16 @@ public class ReaderThread implements Runnable{
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Server Disconnected!!!");
+            System.out.println("Please restart");
+            //e.printStackTrace();
         } finally {
             if(in != null){
                 try {
                     in.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.out.println("Problem while disconnecting");
+                    //e.printStackTrace();
                 }
             }
         }

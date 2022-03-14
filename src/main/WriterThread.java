@@ -28,7 +28,8 @@ public class WriterThread implements Runnable{
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Server Disconnected");
+            //e.printStackTrace();
         } finally {
             if(out != null){
                 out.close();

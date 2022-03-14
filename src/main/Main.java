@@ -18,9 +18,8 @@ public class Main {
             writer.start();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error while connecting, please try again");
+            //e.printStackTrace();
         }
-
-
     }
 }
