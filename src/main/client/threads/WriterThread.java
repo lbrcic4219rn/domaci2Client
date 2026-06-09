@@ -31,13 +31,13 @@ public class WriterThread implements Runnable{
             while (sc.hasNextLine() && running.get()) {
                 String command = sc.nextLine();
                 if ("/quit".equalsIgnoreCase(command.trim())) {
-                    LOGGER.info("Disconnecting...");
+                    LOGGER.log(Level.INFO, "Disconnecting...");
                     running.set(false);
                     break;
                 }
                 out.println(command);
                 if (out.checkError()) {
-                    LOGGER.severe("Server connection lost. Cannot send message.");
+                    LOGGER.log(Level.SEVERE, "Server connection lost. Cannot send message.");
                     running.set(false);
                     break;
                 }

@@ -8,12 +8,13 @@ import java.io.*;
 import java.net.Socket;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 public class ServerThread implements Runnable {
 
-    private static final Logger LOG = Logger.getLogger(ServerThread.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ServerThread.class.getName());
     private static final DateTimeFormatter TIMESTAMP_FMT = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     private static final int MAX_HISTORY = 100;
 
@@ -39,15 +40,15 @@ public class ServerThread implements Runnable {
                 handleMessages(username, in);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                LOG.warning("Interrupted while disconnecting " + username);
+                LOGGER.log(Level.WARNING, "Interrupted while disconnecting {0}", username);
             } finally {
                 disconnect(username);
             }
         } catch (IOException e) {
-            LOG.warning("I/O error for client " + socket.getRemoteSocketAddress() + ": " + e.getMessage());
+            LOGGER.log(Level.WARNING, "I/O error for client {0}: {1}", new Object[]{socket.getRemoteSocketAddress(), e.getMessage()});
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            LOG.warning("Thread interrupted for client " + socket.getRemoteSocketAddress());
+            LOGGER.log(Level.WARNING, "Thread interrupted for client {0}", socket.getRemoteSocketAddress());
         }
     }
 

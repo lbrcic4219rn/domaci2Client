@@ -25,10 +25,10 @@ public class ReaderThread implements Runnable{
         try (var in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
             String msg;
             while((msg = in.readLine()) != null && running.get()){
-                LOGGER.info(msg);
+                LOGGER.log(Level.INFO, "Received message: {0}", msg);
             }
             if(running.get()) {
-                LOGGER.info("Server closed the connection gracefully");
+                LOGGER.log(Level.INFO, "Server closed the connection gracefully");
             }
         } catch (IOException e) {
             if (running.get()) {

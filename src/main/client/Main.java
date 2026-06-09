@@ -12,14 +12,14 @@ import java.util.logging.Logger;
 public class Main {
     public static final String HOST = "127.0.0.1";
     public static final int PORT = 9000;
+    public static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
         AtomicBoolean running = new AtomicBoolean(true);
 
-        Logger logger = Logger.getLogger(Main.class.getName());
 
         try (Socket socket = new Socket(HOST, PORT)) {
-            logger.info("Connected to the server at " + HOST + ":" + PORT);
+            LOGGER.info("Connected to the server at " + HOST + ":" + PORT);
 
             Thread reader = new Thread(new ReaderThread(socket, running));
             Thread writer = new Thread(new WriterThread(socket, running));
@@ -30,13 +30,13 @@ public class Main {
             running.set(false);
             socket.close();
             reader.join();
-            logger.info("Client terminated gracefully.");
+            LOGGER.log(Level.INFO, "Client terminated gracefully.");
 
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Failed to connect to server: {0}", e.getMessage());
+            LOGGER.log(Level.SEVERE, "Failed to connect to server: {0}", e.getMessage());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            logger.log(Level.WARNING, "Application interrupted.");
+            LOGGER.log(Level.WARNING, "Application interrupted.");
         }
     }
 }
