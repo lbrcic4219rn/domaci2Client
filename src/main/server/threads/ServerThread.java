@@ -80,9 +80,7 @@ public class ServerThread implements Runnable {
         }
     }
 
-    private void handleMessages(String username, BufferedReader in)
-            throws IOException, InterruptedException {
-
+    private void handleMessages(String username, BufferedReader in) throws IOException, InterruptedException {
         String raw;
         while ((raw = in.readLine()) != null) {
             String formatted = format(username, sanitize(raw));
