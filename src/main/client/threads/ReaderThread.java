@@ -5,8 +5,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ReaderThread implements Runnable{
+
+    private static final Logger LOGGER = Logger.getLogger(ReaderThread.class.getName());
 
     private final Socket socket;
     private final AtomicBoolean running;
@@ -18,17 +22,17 @@ public class ReaderThread implements Runnable{
 
     @Override
     public void run() {
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+        try (var in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
             String msg;
             while((msg = in.readLine()) != null && running.get()){
-                System.out.println(msg);
+                LOGGER.info(msg);
             }
             if(running.get()) {
-                System.out.println("Server closed the connection gracefully");
+                LOGGER.info("Server closed the connection gracefully");
             }
         } catch (IOException e) {
             if (running.get()) {
-                System.err.println("Server disconnected unexpectedly: " + e.getMessage());
+                LOGGER.log(Level.WARNING, "Server disconnected unexpectedly: {0}", e.getMessage());
             }
         } finally {
             running.set(false);

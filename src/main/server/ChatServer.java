@@ -15,5 +15,5 @@ public class ChatServer {
     public final ConcurrentHashMap<String, Socket> users = new ConcurrentHashMap<>();
     public final ConcurrentHashMap<String, PrintWriter> writers = new ConcurrentHashMap<>();
     public final CopyOnWriteArrayList<String> history = new CopyOnWriteArrayList<>();
-    public final List<String> forbiddenWords = List.of("corona", "war", "flip", "dead");
+    public static final List<String> FORBIDDEN_WORDS = List.of("corona", "war", "flip", "dead");
 }

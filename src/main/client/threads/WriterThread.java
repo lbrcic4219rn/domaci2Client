@@ -6,8 +6,12 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class WriterThread implements Runnable{
+
+    private static final Logger LOGGER = Logger.getLogger(WriterThread.class.getName());
 
     private final Socket socket;
     private final AtomicBoolean running;
@@ -19,27 +23,27 @@ public class WriterThread implements Runnable{
 
     @Override
     public void run() {
-        try (PrintWriter out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
-             Scanner sc = new Scanner(System.in)) {
+        try (var out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
+             var sc = new Scanner(System.in)) {
 
-            System.out.println("Type your messages below (type '/quit' to exit):");
+            LOGGER.info("Type your messages below (type '/quit' to exit):");
 
             while (sc.hasNextLine() && running.get()) {
                 String command = sc.nextLine();
                 if ("/quit".equalsIgnoreCase(command.trim())) {
-                    System.out.println("Disconnecting...");
+                    LOGGER.info("Disconnecting...");
                     running.set(false);
                     break;
                 }
                 out.println(command);
                 if (out.checkError()) {
-                    System.err.println("Server connection lost. Cannot send message.");
+                    LOGGER.severe("Server connection lost. Cannot send message.");
                     running.set(false);
                     break;
                 }
             }
         } catch (IOException e) {
-            System.out.println("Server Disconnected");
+            LOGGER.log(Level.WARNING, "Server Disconnected: {0}", e.getMessage());
         } finally {
             running.set(false);
         }

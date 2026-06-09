@@ -6,6 +6,8 @@ import main.server.threads.ServerThread;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main {
 
@@ -17,13 +19,13 @@ public class Main {
         Thread broadcast = new Thread(new BroadcastThread(server));
         broadcast.start();
 
-        try (ServerSocket ss = new ServerSocket(PORT)) {
+        try (var ss = new ServerSocket(PORT)) {
             while (!Thread.currentThread().isInterrupted()) {
                 Socket client = ss.accept();
                 new Thread(new ServerThread(client, server)).start();
             }
         } catch (IOException e) {
-            System.out.println("Problem connecting to the client");
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, "Problem accepting client connections", e);
         }
 
     }
