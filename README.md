@@ -1,5 +1,5 @@
 
-# Socket Chat
+# socket-chat
 
 A multi-threaded Java console chat application: a small TCP server that accepts multiple clients, broadcasts messages, and keeps a short history.
 
